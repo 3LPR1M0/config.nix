@@ -19,7 +19,7 @@ boot.loader.systemd-boot.enable = false;
 
 networking.hostName = "nixos-btw";
   networking.networkmanager.enable = true;
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
   time.timeZone = "America/New_York";
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -38,20 +38,17 @@ networking.hostName = "nixos-btw";
 
 services.xserver = {
   enable = true;
-  desktopManager = {
-    xterm.enable = false;
-    xfce.enable = true;
-  };
-  windowManager.i3 = {
+desktopManager.lxqt = {
+ enable = true;
+};
+windowManager.i3 = {
     enable = true;
     extraPackages = with pkgs; [
       i3status
       dmenu
    ];
   };
-  windowManager.windowmaker.enable = true;
 };
-
 services.displayManager.defaultSession = "none+i3";
 
 xdg.portal = {
@@ -66,7 +63,10 @@ services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
 services.gvfs.enable = true;
 security.polkit.enable = true;
-
+services.xserver.displayManager.lightdm = {
+  enable = true;
+  greeters.gtk.enable = true;
+};
   services.xserver.xkb = {
     layout = "us";
     variant = "";
@@ -136,6 +136,11 @@ programs.niri.enable = true;
   environment.systemPackages = with pkgs; [
   zen-browser.packages."${pkgs.system}".default
   neovim
+  vlc
+  curl
+  vim
+  udiskie
+  networkmanagerapplet
     easyeffects
     git
     nautilus
@@ -147,7 +152,6 @@ programs.niri.enable = true;
     maim
     localsend
     feh #i3 wpp
-    zed-editor
     obs-studio
     fastfetch
     prismlauncher
@@ -162,7 +166,6 @@ programs.niri.enable = true;
     nodejs #4 nvim config
     clang-tools 
     lua-language-server
-    pyright
     gcc
   ];
 

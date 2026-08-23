@@ -4,7 +4,7 @@
   imports =
     [ 
       ./hardware-configuration.nix
-    ];
+   ];
 
 boot.loader.grub = {
   enable = true;
@@ -38,9 +38,6 @@ networking.hostName = "nixos-btw";
 
 services.xserver = {
   enable = true;
-desktopManager.lxqt = {
- enable = true;
-};
 windowManager.i3 = {
     enable = true;
     extraPackages = with pkgs; [
@@ -50,6 +47,8 @@ windowManager.i3 = {
   };
 };
 services.displayManager.defaultSession = "none+i3";
+
+programs.mango.enable = true;
 
 xdg.portal = {
   enable = true;
@@ -63,10 +62,8 @@ services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
 services.gvfs.enable = true;
 security.polkit.enable = true;
-services.xserver.displayManager.lightdm = {
-  enable = true;
-  greeters.gtk.enable = true;
-};
+services.displayManager.ly.enable = true;
+
   services.xserver.xkb = {
     layout = "us";
     variant = "";
@@ -126,8 +123,6 @@ services.picom = {
   enable32Bit = true;
   };
 
-programs.niri.enable = true;
-
   nixpkgs.config.allowUnfree = true;
   programs.steam.enable = true;
   fonts.packages = with pkgs; [
@@ -135,7 +130,9 @@ programs.niri.enable = true;
   ];
   environment.systemPackages = with pkgs; [
   zen-browser.packages."${pkgs.system}".default
-  neovim
+tmux
+
+neovim
   vlc
   curl
   vim

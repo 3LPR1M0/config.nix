@@ -19,7 +19,7 @@ boot.loader.systemd-boot.enable = false;
 
 networking.hostName = "nixos-btw";
   networking.networkmanager.enable = true;
-  networking.firewall.enable = true;
+  networking.firewall.enable = false;
   time.timeZone = "America/New_York";
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -36,6 +36,18 @@ networking.hostName = "nixos-btw";
     LC_TIME = "en_US.UTF-8";
   };
 
+#fer no sleep 
+systemd.targets.sleep.enable = false;
+systemd.targets.suspend.enable = false;
+systemd.targets.hibernate.enable = false;
+systemd.targets.hybrid-sleep.enable = false;
+services.logind.settings.Login = {
+  HandleLidSwitch = "ignore";
+  IdleAction = "ignore";
+};
+
+
+
 services.xserver = {
   enable = true;
 windowManager.i3 = {
@@ -45,10 +57,12 @@ windowManager.i3 = {
       dmenu
    ];
   };
-};
+  desktopManager = {
+  xfce.enable = true;
+  };
+  windowManager.oxwm.enable = true;
+ };
 services.displayManager.defaultSession = "none+i3";
-
-programs.mango.enable = true;
 
 xdg.portal = {
   enable = true;
@@ -62,7 +76,7 @@ services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
 services.gvfs.enable = true;
 security.polkit.enable = true;
-services.displayManager.ly.enable = true;
+services.displayManager.ly.enable = false;
 
   services.xserver.xkb = {
     layout = "us";
@@ -89,7 +103,6 @@ services.displayManager.ly.enable = true;
     extraGroups = [ "networkmanager" "plugdev" "wheel" "libvirtd" ];
   };
 
-  programs.firefox.enable = true;
 
   nix.gc = {
   automatic = true;
@@ -123,47 +136,53 @@ services.picom = {
   enable32Bit = true;
   };
 
+
   nixpkgs.config.allowUnfree = true;
   programs.steam.enable = true;
   fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono
   ];
   environment.systemPackages = with pkgs; [
-  zen-browser.packages."${pkgs.system}".default
-tmux
-
-neovim
-  vlc
-  curl
-  vim
-  udiskie
-  networkmanagerapplet
+    zen-browser.packages."${pkgs.system}".default
+    tmux
+    fsel
+    neovim
+    vlc
+    curl
+    vim
+    udiskie
+    networkmanagerapplet
     easyeffects
     git
-    nautilus
-    fastfetch
     kitty
     nixd
     qutebrowser
-    rofi
     maim
     localsend
     feh #i3 wpp
-    obs-studio
-    fastfetch
     prismlauncher
     spice-gtk #4 virtmachinery
     brave
-    lmms
     piper #4 g502
     libratbag #4 g502 
-    joplin-desktop #note taking
 #4 nvim config
     unzip #4 nvim config
     nodejs #4 nvim config
     clang-tools 
     lua-language-server
     gcc
+    (st.overrideAttrs (oldAttrs: rec {
+    patches = [
+      (fetchpatch {
+  url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.9.2.diff";
+ sha256 = "sha256-ZypvRONAHS//wnZjivmqpWIqZlKTqAQ0Q8DhQpZVaqU=";
+})
+	(fetchpatch {
+  url = "https://st.suckless.org/patches/gruvbox/st-gruvbox-dark-0.8.5.diff";
+  sha256 = "sha256-dOkrjXGxFgIRy4n9g2RQjd8EBAvpW4tNmkOVj4TaFGg=";
+})  
+    ];
+  }))
   ];
 
   system.stateVersion = "25.11"; # Did you read the comment?

@@ -1,4 +1,4 @@
-{ config, pkgs, zen-browser, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
@@ -13,13 +13,15 @@ boot.loader.grub = {
   useOSProber = true;
   timeout = 5;
 };
-boot.loader.efi.canTouchEfiVariables = false;
-boot.loader.grub.efiInstallAsRemovable = true;
-boot.loader.systemd-boot.enable = false;
+    boot.loader.efi.canTouchEfiVariables = false;
+    boot.loader.grub.efiInstallAsRemovable = true;
+    boot.loader.systemd-boot.enable = false;
 
-networking.hostName = "nixos-btw";
-  networking.networkmanager.enable = true;
-  networking.firewall.enable = false;
+    networking.hostName = "nixos-btw";
+    
+    networking.networkmanager.enable = true;
+    networking.firewall.enable = true;
+
   time.timeZone = "America/New_York";
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -37,16 +39,19 @@ networking.hostName = "nixos-btw";
   };
 
 #fer no sleep 
-systemd.targets.sleep.enable = false;
-systemd.targets.suspend.enable = false;
-systemd.targets.hibernate.enable = false;
-systemd.targets.hybrid-sleep.enable = false;
-services.logind.settings.Login = {
-  HandleLidSwitch = "ignore";
-  IdleAction = "ignore";
+    systemd.targets.sleep.enable = false;
+    systemd.targets.suspend.enable = false;
+    systemd.targets.hibernate.enable = false;
+    systemd.targets.hybrid-sleep.enable = false;
+    services.logind.settings.Login = {
+	HandleLidSwitch = "ignore";
+	IdleAction = "ignore";
+    };
+
+ services.xserver.xkb = {
+    layout = "us";
+    variant = "";
 };
-
-
 
 services.xserver = {
   enable = true;
@@ -57,12 +62,9 @@ windowManager.i3 = {
       dmenu
    ];
   };
-  desktopManager = {
-  xfce.enable = true;
-  };
+  desktopManager.xfce.enable = true;
   windowManager.oxwm.enable = true;
  };
-services.displayManager.defaultSession = "none+i3";
 
 xdg.portal = {
   enable = true;
@@ -71,18 +73,21 @@ xdg.portal = {
     xdg-desktop-portal-gnome
   ];
 };
+
 programs.dconf.enable = true;
 services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
 services.gvfs.enable = true;
 security.polkit.enable = true;
-services.displayManager.ly.enable = false;
+services.displayManager.ly.enable = true;
+services.picom = {
+  enable = true;
+  vSync = true;
+  backend = "glx";
+  };
 
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-};
-  services.printing.enable = true;
+
+  services.printing.enable = false;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
  
@@ -103,7 +108,6 @@ services.displayManager.ly.enable = false;
     extraGroups = [ "networkmanager" "plugdev" "wheel" "libvirtd" ];
   };
 
-
   nix.gc = {
   automatic = true;
   dates = "weekly";
@@ -111,12 +115,12 @@ services.displayManager.ly.enable = false;
   };
 
 hardware.bluetooth = {
-  enable = true;
+  enable = false;
   powerOnBoot = false;
 };
+
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
-  
   security.wrappers.spice-client-glib-usb-acl-helper = {
   source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
   owner = "root";
@@ -125,12 +129,6 @@ hardware.bluetooth = {
 };
 
 
-services.picom = {
-  enable = true;
-  vSync = true;
-  backend = "glx";
-  };
-
   hardware.graphics = {
   enable = true;
   enable32Bit = true;
@@ -138,20 +136,26 @@ services.picom = {
 
 
   nixpkgs.config.allowUnfree = true;
-  programs.steam.enable = true;
-  fonts.packages = with pkgs; [
+
+fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono
+  nerd-fonts.zed-mono
+  nerd-fonts.iosevka
   ];
+
+programs.steam.enable = true;
+
+programs.firefox.enable = true;
+
   environment.systemPackages = with pkgs; [
-    zen-browser.packages."${pkgs.system}".default
     tmux
     fsel
     neovim
     vlc
     curl
+    ghostty
     vim
     udiskie
-    networkmanagerapplet
     easyeffects
     git
     kitty
@@ -162,7 +166,6 @@ services.picom = {
     feh #i3 wpp
     prismlauncher
     spice-gtk #4 virtmachinery
-    brave
     piper #4 g502
     libratbag #4 g502 
 #4 nvim config
@@ -171,18 +174,6 @@ services.picom = {
     clang-tools 
     lua-language-server
     gcc
-    (st.overrideAttrs (oldAttrs: rec {
-    patches = [
-      (fetchpatch {
-  url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.9.2.diff";
- sha256 = "sha256-ZypvRONAHS//wnZjivmqpWIqZlKTqAQ0Q8DhQpZVaqU=";
-})
-	(fetchpatch {
-  url = "https://st.suckless.org/patches/gruvbox/st-gruvbox-dark-0.8.5.diff";
-  sha256 = "sha256-dOkrjXGxFgIRy4n9g2RQjd8EBAvpW4tNmkOVj4TaFGg=";
-})  
-    ];
-  }))
   ];
 
   system.stateVersion = "25.11"; # Did you read the comment?

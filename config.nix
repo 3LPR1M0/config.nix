@@ -62,9 +62,8 @@ windowManager.i3 = {
       dmenu
    ];
   };
-  desktopManager.xfce.enable = true;
-  windowManager.oxwm.enable = true;
- };
+windowManager.oxwm.enable = true;
+};
 
 xdg.portal = {
   enable = true;
@@ -79,7 +78,7 @@ services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
 services.gvfs.enable = true;
 security.polkit.enable = true;
-services.displayManager.ly.enable = true;
+services.displayManager.sddm.enable = true;
 services.picom = {
   enable = true;
   vSync = true;
@@ -134,31 +133,30 @@ hardware.bluetooth = {
   enable32Bit = true;
   };
 
-
   nixpkgs.config.allowUnfree = true;
 
 fonts.packages = with pkgs; [
   nerd-fonts.jetbrains-mono
-  nerd-fonts.zed-mono
-  nerd-fonts.iosevka
   ];
 
 programs.steam.enable = true;
-
+programs.starship.enable = true;
 programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
+  libreoffice
+  busybox
     tmux
-    fsel
+    htop
+    yazi
     neovim
     vlc
+    pcmanfm 
+    osu-lazer
     curl
     ghostty
-    vim
     udiskie
-    easyeffects
     git
-    kitty
     nixd
     qutebrowser
     maim
@@ -168,7 +166,6 @@ programs.firefox.enable = true;
     spice-gtk #4 virtmachinery
     piper #4 g502
     libratbag #4 g502 
-#4 nvim config
     unzip #4 nvim config
     nodejs #4 nvim config
     clang-tools 
@@ -176,6 +173,5 @@ programs.firefox.enable = true;
     gcc
   ];
 
-  system.stateVersion = "25.11"; # Did you read the comment?
-
+  system.stateVersion = "25.11";
 }

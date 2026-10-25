@@ -38,16 +38,6 @@ boot.loader.grub = {
     LC_TIME = "en_US.UTF-8";
   };
 
-#fer no sleep 
-    systemd.targets.sleep.enable = false;
-    systemd.targets.suspend.enable = false;
-    systemd.targets.hibernate.enable = false;
-    systemd.targets.hybrid-sleep.enable = false;
-    services.logind.settings.Login = {
-	HandleLidSwitch = "ignore";
-	IdleAction = "ignore";
-    };
-
  services.xserver.xkb = {
     layout = "us";
     variant = "";

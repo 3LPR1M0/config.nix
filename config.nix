@@ -45,30 +45,23 @@ boot.loader.grub = {
 
 services.xserver = {
   enable = true;
-windowManager.i3 = {
-    enable = true;
-    extraPackages = with pkgs; [
-      i3status
-      dmenu
-   ];
-  };
 windowManager.oxwm.enable = true;
+windowManager.windowmaker.enable = true;
 };
 
 xdg.portal = {
   enable = true;
+  config.common.default = "*";
   extraPortals = with pkgs; [
     xdg-desktop-portal-gtk
-    xdg-desktop-portal-gnome
   ];
 };
 
 programs.dconf.enable = true;
-services.gnome.gnome-keyring.enable = true;
 services.udisks2.enable = true;
-services.gvfs.enable = true;
+services.gvfs.enable = true; #this for da pcmanfm or thunar dependency and shit 
 security.polkit.enable = true;
-services.displayManager.sddm.enable = true;
+services.displayManager.ly.enable = true;
 services.picom = {
   enable = true;
   vSync = true;
@@ -117,32 +110,43 @@ hardware.bluetooth = {
   setuid = true;
 };
 
-
   hardware.graphics = {
   enable = true;
   enable32Bit = true;
   };
 
-  nixpkgs.config.allowUnfree = true;
+ nixpkgs.config.allowUnfree = false;
 
-fonts.packages = with pkgs; [
+fonts = {
+packages = with pkgs; [
   nerd-fonts.jetbrains-mono
+  maple-mono.NF
   ];
+  fontconfig.defaultFonts = {
+  monospace = [ "Maple Mono NF" ];
+  };
+  };
 
-programs.steam.enable = true;
 programs.starship.enable = true;
 programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
-  libreoffice
-  busybox
+    libreoffice
+    librewolf
+    freecad
+    openscad
+    fastfetch
     tmux
+    xbindkeys
+    conky
+    cmatrix
+    xdotool
+    dmenu
     htop
     yazi
     neovim
     vlc
     pcmanfm 
-    osu-lazer
     curl
     ghostty
     udiskie
@@ -151,11 +155,8 @@ programs.firefox.enable = true;
     qutebrowser
     maim
     localsend
-    feh #i3 wpp
-    prismlauncher
+    feh 
     spice-gtk #4 virtmachinery
-    piper #4 g502
-    libratbag #4 g502 
     unzip #4 nvim config
     nodejs #4 nvim config
     clang-tools 

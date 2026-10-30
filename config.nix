@@ -45,9 +45,9 @@ boot.loader.grub = {
 
 services.xserver = {
   enable = true;
-windowManager.oxwm.enable = true;
 windowManager.windowmaker.enable = true;
 };
+programs.mango.enable = true;
 
 xdg.portal = {
   enable = true;
@@ -131,21 +131,22 @@ programs.starship.enable = true;
 programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
-    libreoffice
-    librewolf
+    swaybg
+    swww
+    waypaper
+    clock-rs
+    cava
     freecad
     openscad
     fastfetch
     tmux
     xbindkeys
-    conky
     cmatrix
     xdotool
     dmenu
     htop
     yazi
     neovim
-    vlc
     pcmanfm 
     curl
     ghostty
